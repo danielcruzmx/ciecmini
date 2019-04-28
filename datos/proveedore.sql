@@ -1,0 +1,17 @@
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(1, 'NINGUNO', NULL, NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(2, 'SR JERONIMO', NULL, NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(3, 'SR MARIANO', NULL, NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(4, 'VICTORIA GONZALEZ AYALA', NULL, NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(5, 'SR. LECHUGA', NULL, NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(6, 'A102', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(7, 'A302', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(8, 'A002', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(9, 'C102', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(10, 'C101', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(11, 'C301', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(12, 'B302', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(13, 'A301', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(14, 'A201', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(15, 'B301', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(16, 'B201', 'SADI 81', NULL, NULL, NULL, '0');
+INSERT INTO `proveedore` (`id`, `proveedor`, `domicilio`, `telefono`, `email`, `rfc`, `clabe`) VALUES(17, 'A101', 'SADI 81', NULL, NULL, NULL, '0');

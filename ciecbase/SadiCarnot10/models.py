@@ -53,12 +53,12 @@ class Condomino(models.Model):
     #http://127.0.0.1:8000/admin/c_olimpo/asiento/?condomino__id__exact=9
 
     def cargos(self):
-        return mark_safe('<a href="/admin/c_sadicarnot/asiento/?condomino__id__exact=%d">Cargos view</a>' % (self.id))
+        return mark_safe('<a href="/admin/SadiCarnot10/asiento/?condomino__id__exact=%d">Cargos view</a>' % (self.id))
 
     #http://127.0.0.1:8000/admin/c_olimpo/movimiento/?condomino__id__exact=10
 
     def depositos(self):
-        return mark_safe('<a href="/admin/c_sadicarnot/movimiento/?condomino__id__exact=%d">Depositos view</a>' % (self.id))
+        return mark_safe('<a href="/admin/SadiCarnot10/movimiento/?condomino__id__exact=%d">Depositos view</a>' % (self.id))
 
     def cuotas(self):
         return mark_safe('<a href="/explorer/5/download?format=csv&params=depto:\'%s\'">Cuotas *.csv</a>' % (self.depto))

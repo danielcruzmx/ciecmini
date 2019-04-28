@@ -16,14 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
+from main import views
 
 admin.site.site_header = "Cuotas, Ingresos y Egresos Condominales"
 admin.site.site_title  = "CIEC Administrador"
-admin.site.index_title = "Bienvenido al CIEC"
+admin.site.index_title = "CIEC Bienvenidos"
 
 
 urlpatterns = [
     #path('grappelli/', include('grappelli.urls')), 
+    url(r'^$', views.home, name='home'),
     path('admin/', admin.site.urls),
     url(r'^explorer/', include('explorer.urls')),
 ]

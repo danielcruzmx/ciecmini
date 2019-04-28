@@ -25,4 +25,5 @@ admin.site.index_title = "Bienvenido al CIEC"
 urlpatterns = [
     #path('grappelli/', include('grappelli.urls')), 
     path('admin/', admin.site.urls),
+    url(r'^explorer/', include('explorer.urls')),
 ]

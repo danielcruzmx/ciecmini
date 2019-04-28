@@ -6,7 +6,12 @@ from django.contrib import admin
 
 from Catalogos.models import TipoMovimiento, Situacion,     \
                              Banco, Condominio, Proveedore, \
-                             PeriodoCorte, TipoDocumento
+                             PeriodoCorte, TipoDocumento,   \
+                             CuentaContable
+
+class CuentaContableAdmin(admin.ModelAdmin):
+    list_display = ('num_cuenta', 'descripcion')
+    list_filter = ('num_cuenta',)
 
 class TipoMovimientoAdmin(admin.ModelAdmin):
     list_display = ('descripcion',)
@@ -37,5 +42,6 @@ admin.site.register(Banco, BancoAdmin)
 admin.site.register(Condominio, CondominioAdmin)
 admin.site.register(Proveedore, ProveedoreAdmin)
 admin.site.register(PeriodoCorte, PeriodoAdmin)
+admin.site.register(CuentaContable, CuentaContableAdmin)
 
 

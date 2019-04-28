@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'explorer',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Catalogos',
-    'Condominio_SadiCarnot10',
+    'SadiCarnot10',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +106,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
+
+EXPLORER_CONNECTIONS = { 'default': 'default' }
+EXPLORER_DEFAULT_CONNECTION = 'default'
 
 LANGUAGE_CODE = 'en-MX'
 

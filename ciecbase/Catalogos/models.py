@@ -95,3 +95,17 @@ class PeriodoCorte(models.Model):
     class Meta:
         managed = True
         db_table = 'periodo'
+
+class CuentaContable(models.Model):
+    num_cuenta = models.CharField(max_length=20)
+    descripcion = models.CharField(max_length=100)
+    clave_mayor = models.CharField(max_length=4)
+
+    def __str__(self):
+        return '%s %s' % (self.num_cuenta, self.descripcion)
+
+    class Meta:
+        managed = True
+        db_table = 'cuenta_contable'
+        ordering = ['num_cuenta']
+        verbose_name_plural = "Cuentas contables"

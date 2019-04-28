@@ -41,7 +41,7 @@ def insertadatos(database, file):
                     cur.execute(r.strip())
                     #print(r)
                 cur.execute("commit")
-                print(cur.lastrowid)
+                print(" Registros ",cur.lastrowid)
                 return True
             except:
                 print(" ERROR en ", r.strip())
@@ -55,12 +55,15 @@ def insertadatos(database, file):
 def main():
     database = "/home/ciecbase/db.sqlite3"
     pathd = "/home/datos/"
-    catalogos = ['tipo_movimiento','tipo_documento','situacion','banco','condominio','proveedore','periodo']
+    #catalogos = ['tipo_movimiento','tipo_documento','situacion','banco','condominio','proveedore','periodo','cuenta_contable']
+    #condominio = ['sadi_asiento','sadi_condomino','sadi_estacionamiento','sadi_condomino_estacionamiento','sadi_cuenta_banco','sadi_documento',,'sadi_detalle_movimiento','sadi_movimiento']
+    condominio =  ['sadi_condomino','sadi_movimiento']
 
-    for t in catalogos:
+    for t in condominio:
         file  = pathd + t + ".sql"
         with create_connection(database) as conn: 
-            consulta(conn, "select * from " + t )
+            consulta(conn, "select count(*) as registros from " + t )
+            print(t)
             insertadatos(database, file)
     
 if __name__ == '__main__':

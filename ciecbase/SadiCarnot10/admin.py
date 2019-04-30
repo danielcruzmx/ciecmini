@@ -4,7 +4,8 @@ from django.utils.safestring import mark_safe
 
 
 from SadiCarnot10.models import Condomino, Estacionamiento, CuentaBanco, \
-                            DetalleMovimiento, Documento, Movimiento, Asiento
+                                DetalleMovimiento, Documento, Movimiento, \
+                                Asiento, AcumuladoMes
 
 class DetalleMovtoInlineB(admin.TabularInline):
 	model = DetalleMovimiento
@@ -67,6 +68,9 @@ class AuxiliarAdminAB(admin.ModelAdmin):
 	date_hierarchy = 'fecha'
 	ordering = ('-fecha',)
 
+class AcumuladoAdminB(admin.ModelAdmin):
+    list_display = ('cuenta_banco', 'mes','fecha_inicial', 'fecha_final', 'depositos','retiros', 'saldo')
+    ordering = ('fecha_inicial', 'cuenta_banco',)
 
 admin.site.register(Movimiento, MovtoAdminB)
 admin.site.register(CuentaBanco, CuentaBancoAdminB)
@@ -74,3 +78,5 @@ admin.site.register(Condomino, CondominoAdminB)
 admin.site.register(Estacionamiento, EstacionamientoAdminB)
 admin.site.register(Documento, DocumentoAdminB)
 admin.site.register(Asiento, AuxiliarAdminAB)
+admin.site.register(AcumuladoMes, AcumuladoAdminB)
+

@@ -20,7 +20,7 @@ class CuentaBanco(models.Model):
     cuenta = models.CharField(max_length=20)
     clabe = models.CharField(max_length=18)
     apoderado = models.CharField(max_length=60)
-    saldo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    saldo = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name = ('Saldo inicial'))
     fecha_saldo = models.DateField(blank=True, null=True)
     situacion = models.IntegerField(blank=True, null=True)
     banco = models.ForeignKey(Banco, related_name='sadi_banco_cuenta', on_delete=models.PROTECT)
@@ -104,7 +104,7 @@ class Movimiento(models.Model):
     class Meta:
         managed = True
         db_table = 'sadi_movimiento'
-        ordering = ['fecha']
+        ordering = ['fecha']    
 
 class DetalleMovimiento(models.Model):
     movimiento = models.ForeignKey(Movimiento, verbose_name = ('Movto'), on_delete = models.CASCADE, related_name='sadi_mov_detalle')
@@ -140,3 +140,22 @@ class Asiento(models.Model):
         managed = True
         db_table = 'sadi_asiento'
         ordering = ['fecha']
+
+class AcumuladoMes(models.Model):
+    condominio = models.CharField(max_length=45, blank=True, null=True)
+    cuenta_banco = models.CharField(max_length=20, blank=True, null=True)
+    mes = models.CharField(max_length=7, blank=True, null=True)
+    fecha_inicial = models.DateField(blank=True, null=True)
+    fecha_final = models.DateField(blank=True, null=True)
+    depositos = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True, default=0)
+    retiros = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True, default=0)
+    saldo = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True, default=0)
+
+    def __str__(self):
+        return u'%s %s %s %s %d %d %d' % (self.cuenta_banco,self.mes,self.fecha_inicial.strftime('%d/%m/%Y'), self.fecha_final.strftime('%d/%m/%Y'),self.depositos, self.retiros, self.saldo)
+ 
+    class Meta:
+        managed = True
+        db_table = 'sadi_acumulado_mes'
+        verbose_name_plural = "Acumulados mensuales"
+

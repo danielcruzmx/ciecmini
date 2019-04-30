@@ -88,7 +88,7 @@ class PeriodoCorte(models.Model):
     condominio = models.ForeignKey(Condominio, on_delete=models.PROTECT)
     fecha_inicial = models.DateField(blank=True, null=True)
     fecha_final = models.DateField(blank=True, null=True)
-    saldo = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    saldo = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True)
 
     def __str__(self):
         return '%s' % (self.condominio)

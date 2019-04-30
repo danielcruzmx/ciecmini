@@ -1,13 +1,9 @@
-FROM python:3.7-alpine as basepython3
+FROM python:3.7.3-stretch as basepython373
 
-RUN apk --update add git less openssh && \
-    apk add --update curl gcc g++ && \
-    apk add nano && \
-    apk add bash && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm /var/cache/apk/*
-
-RUN ln -s /usr/include/locale.h /usr/include/xlocale.h
+RUN apt-get update 
+RUN apt-get install git && \
+    apt-get install curl gcc g++ && \
+    rm -rf /var/lib/apt/lists/* 
 
 COPY ./ciecbase/requirements.txt /home
 

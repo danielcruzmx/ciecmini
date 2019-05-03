@@ -1,11 +1,14 @@
+import csv
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.http import HttpResponse
 # Register your models here.
 
+from Procesos.procesos import run_determinacionSaldos
 
 from SadiCarnot10.models import Condomino, Estacionamiento, CuentaBanco, \
                                 DetalleMovimiento, Documento, Movimiento, \
-                                Asiento, AcumuladoMes
+                                Asiento, AcumuladoMes, CuotasCondominio
 
 class DetalleMovtoInlineB(admin.TabularInline):
 	model = DetalleMovimiento
@@ -30,6 +33,7 @@ class MovtoAdminB(admin.ModelAdmin):
     ordering = ('-fecha',)
     save_on_top = True
     inlines = [DetalleMovtoInlineB]
+    actions = ['export_as_csv']
 
     def concepto(self, request, obj=None, **kwargs):
         return '%s %s' % (request.tipo_movimiento,request.descripcion)
@@ -49,28 +53,77 @@ class MovtoAdminB(admin.ModelAdmin):
 
     conciliacion.boolean = True
 
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Exportar Seleccion a CSV"
+
 class CuentaBancoAdminB(admin.ModelAdmin):
     list_display = ('banco','clabe','apoderado')
 
 class CondominoAdminB(admin.ModelAdmin):
-	list_display = ('depto','propietario','cargos','depositos','cuotas')
-	search_fields = ('depto','propietario','poseedor')
+    list_display = ('depto','propietario','estado_cuenta','depositos','descarga')
+    search_fields = ('depto','propietario','poseedor')
+    actions = ['determina_saldos']
+
+    def determina_saldos(self, request, queryset):
+        for obj in queryset:
+            #print(" determina saldos %s " % obj.depto)
+            run_determinacionSaldos(obj)
+        self.message_user(request, " Fin del proceso de determinacion de saldos ")
+    
+    determina_saldos.short_description = "Determinacion de Saldos"
 
 class EstacionamientoAdminB(admin.ModelAdmin):
 	list_display = ('ubicacion',)
 
 class DocumentoAdminB(admin.ModelAdmin):
-	list_display = ('tipo_documento','folio','fecha_expedicion','monto_total')
+    list_display = ('tipo_documento','folio','fecha_expedicion','monto_total')
 
 class AuxiliarAdminAB(admin.ModelAdmin):
-	list_display = ('id','fecha','tipo_movimiento','debe','haber','descripcion', 'cuenta_contable','condomino')
+	list_display = ('condomino','fecha','detalle_movimiento','haber','debe','saldo')
 	list_filter = ('fecha', 'condomino',)
 	date_hierarchy = 'fecha'
 	ordering = ('-fecha',)
 
+class CuotasAdminAB(admin.ModelAdmin):
+    list_display = ('descripcion', 'mes_inicial', 'mes_final', 'monto','cuenta_contable')
+    ordering = ('-mes_inicial',)    
+
 class AcumuladoAdminB(admin.ModelAdmin):
     list_display = ('cuenta_banco', 'mes','fecha_inicial', 'fecha_final', 'depositos','retiros', 'saldo')
     ordering = ('fecha_inicial', 'cuenta_banco',)
+    date_hierarchy = 'fecha_inicial'
+    actions = ['export_as_csv']
+
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Exportar Seleccion a CSV"
 
 admin.site.register(Movimiento, MovtoAdminB)
 admin.site.register(CuentaBanco, CuentaBancoAdminB)
@@ -79,4 +132,5 @@ admin.site.register(Estacionamiento, EstacionamientoAdminB)
 admin.site.register(Documento, DocumentoAdminB)
 admin.site.register(Asiento, AuxiliarAdminAB)
 admin.site.register(AcumuladoMes, AcumuladoAdminB)
+admin.site.register(CuotasCondominio, CuotasAdminAB)
 

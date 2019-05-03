@@ -14,7 +14,7 @@ class PeriodoAdminABC(admin.ModelAdmin):
     def acumulados(self, request, queryset):
         for obj in queryset:
             #field_value = getattr(obj, 'condominio')
-            print(" genera acumulados %s " % obj.condominio)
+            #print(" genera acumulados %s " % obj.condominio)
             run_acumuladosMensuales(obj.condominio)
         self.message_user(request, " Fin del proceso de generacion de acumulados ")
 

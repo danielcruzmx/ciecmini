@@ -160,6 +160,7 @@ class CuotasCondominio(models.Model):
     fecha_vencimiento = models.DateField(blank=True, null=True)
     monto = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True, default=0)
     cuenta_contable =  models.ForeignKey(CuentaContable, verbose_name = ('Cuenta Contable'), on_delete = models.CASCADE, related_name='sadi_cuota_cuenta')
+    condomino = models.ManyToManyField(Condomino, related_name='sadi_cuotas_condomino_id')
 
     def __str__(self):
         return u'%s %s %s %d %s' % (self.descripcion, self.mes_inicial.strftime('%m-%Y'), self.mes_final.strftime('%m-%Y'), self.monto, self.cuenta_contable)
@@ -188,4 +189,3 @@ class AcumuladoMes(models.Model):
         managed = True
         db_table = 'sadi_acumulado_mes'
         verbose_name_plural = "Acumulados mensuales"
-

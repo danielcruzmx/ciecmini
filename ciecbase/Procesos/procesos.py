@@ -74,63 +74,56 @@ def run_determinacionSaldos(condomino):
 		n = execsql('delete from sadi_asiento where condomino_id = %s' % condomino.id)
 		#
 		#Agrega adeudo inicial
-		adeudo = condomino.adeudo_inicial
-		reg = Asiento(fecha = condomino.fecha_corte_saldo, fecha_vencimiento=condomino.fecha_corte_saldo, \
+		if not condomino.depto == '0000':
+			adeudo = condomino.adeudo_inicial
+			reg = Asiento(fecha = condomino.fecha_corte_saldo, fecha_vencimiento=condomino.fecha_corte_saldo, \
 							tipo_movimiento = tipo, descripcion='SALDO INICIAL A LA FECHA', \
 							debe = 0, haber=adeudo, saldo=adeudo, cuenta_contable=cuenta, \
 							condomino = condomino, a_favor = prove)
-		reg.save()
+			reg.save()
 		#
 		#Agrega adeudos por cuotas
 		rows = CuotasCondominio.objects.all().order_by('mes_inicial')
 		for r in rows:
 			delta = (r.mes_final - r.mes_inicial)
 			#print(r.descripcion,r.mes_inicial,r.mes_final,r.monto,r.cuenta_contable,delta.days)
-			base = r.mes_inicial
-			#
-			for x in range (0, delta.days + 1):
-				fecha = base + timedelta(days=x)
-				if fecha.day == 1:
-					reg = Asiento(fecha = fecha, fecha_vencimiento=fecha, \
-							tipo_movimiento = tipo, descripcion=r.descripcion , \
-							debe = 0, haber=r.monto, saldo=0, cuenta_contable=r.cuenta_contable, \
-							condomino = condomino, a_favor = prove)
-					reg.save()
+			condom = r.condomino.filter(depto__contains=condomino.depto)
+			if condom:	
+				base = r.mes_inicial
+				for x in range (0, delta.days + 1):
+					fecha = base + timedelta(days=x)
+					if fecha.day == 1:
+						reg = Asiento(fecha = fecha, fecha_vencimiento=fecha, \
+								tipo_movimiento = tipo, descripcion=r.descripcion , \
+								debe = 0, haber=r.monto, saldo=0, cuenta_contable=r.cuenta_contable, \
+								condomino = condomino, a_favor = prove)
+						reg.save()
 		#
 		#Agrega depositos por movimiento de banco
-		movtos = Movimiento.objects.filter(condomino__id=condomino.id)
-		for m in movtos:
-			#adeudo = adeudo - m.deposito
-			#tipo = TipoMovimiento.objects.get(id=m.tipo_movimiento)
-			reg = Asiento(fecha = m.fecha, fecha_vencimiento=m.fecha, \
+		if not condomino.depto == '0000':
+			movtos = Movimiento.objects.filter(condomino__id=condomino.id)
+			for m in movtos:
+				reg = Asiento(fecha = m.fecha, fecha_vencimiento=m.fecha, \
 						tipo_movimiento = m.tipo_movimiento, descripcion=m.descripcion , \
 						debe = m.deposito, haber=0, saldo=0, cuenta_contable=r.cuenta_contable, \
 						condomino = condomino, a_favor = prove)
+				reg.save()
+			#
+			#Recalcula saldos
+			saldo = 0
+			cargos = 0
+			depositos = 0
+			rec = Asiento.objects.filter(condomino__id=condomino.id).order_by('fecha')
+			for r in rec:
+				cargos = cargos + r.haber
+				depositos = depositos + r.debe
+				saldo = saldo + r.haber - r.debe
+				r.saldo = saldo
+				r.save()
+			
+			reg = Condomino.objects.get(id=condomino.id)
+			reg.cargos = cargos
+			reg.pagos = depositos
+			reg.saldo = saldo
 			reg.save()
-		#
-		#Recalcula saldos
-		saldo = 0
-		cargos = 0
-		depositos = 0
-		rec = Asiento.objects.filter(condomino__id=condomino.id).order_by('fecha')
-		for r in rec:
-			cargos = cargos + r.haber
-			depositos = depositos + r.debe
-			saldo = saldo + r.haber - r.debe
-			r.saldo = saldo
-			r.save()
-		#
-		reg = Condomino.objects.get(id=condomino.id)
-		reg.cargos = cargos
-		reg.pagos = depositos
-		reg.saldo = saldo
-		reg.save()
-		#
-		#reg = Asiento(fecha = condomino.fecha_corte_saldo, fecha_vencimiento=condomino.fecha_corte_saldo, \
-		#				tipo_movimiento = prop, descripcion=condomino.propietario , \
-		#				debe = cargos, haber=depositos, saldo=saldo, cuenta_contable=r.cuenta_contable, \
-		#				condomino = condomino, a_favor = prove)
-		#eg.save()	
-
-
-
+			
